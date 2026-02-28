@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly xmlns:j = "jelly:core">
+    <j:new className="java.util.ArrayList" var="Person"/>
+
+    <j:new var="P1" className="java.util.HashMap"/>
+    <j:invoke on="${P1}" method="put">
+        <j:arg value="Name"/>
+        <j:arg value="Fatma"/>
+    </j:invoke>
+    <j:invoke on="${P1}" method="put">
+        <j:arg value="Age"/>
+        <j:arg value="27"/>
+    </j:invoke>
+
+
+
+    <j:invoke on="${Person}" method="add">
+        <j:arg value="${P1}"/>
+    </j:invoke>
+
+
+    <j:new var="P2" className="java.util.HashMap"/>
+    <j:invoke on="${P2}" method="put">
+        <j:arg value="Name"/>
+        <j:arg value="Sarah"/>
+    </j:invoke>
+    <j:invoke on="${P2}" method="put">
+        <j:arg value="Age"/>
+        <j:arg value="23"/>
+    </j:invoke>
+
+
+    <j:invoke on="${Person}" method="add">
+        <j:arg value="${P2}"/>
+    </j:invoke>
+
+
+
+    <j:new var="P3" className="java.util.HashMap"/>
+    <j:invoke on="${P3}" method="put">
+        <j:arg value="Name"/>
+        <j:arg value="Noha"/>
+    </j:invoke>
+    <j:invoke on="${P3}" method="put">
+        <j:arg value="Age"/>
+        <j:arg value="34"/>
+    </j:invoke>
+
+    <j:invoke on="${Person}" method="add">
+        <j:arg value="${P3}"/>
+    </j:invoke>
+
+
+
+    <table style="width:100%">
+        <tr>
+            <th>Name</th>
+            <th>Age</th>
+        </tr>
+        <j:forEach var="obj" items="${Person}">
+            <tr>
+                <j:invoke on="${obj}" method="get" var="UserName">
+                    <j:arg value="Name"/>
+                </j:invoke>
+
+                <j:invoke on="${obj}" method="get" var="UserAge">
+                    <j:arg value="Age"/>
+                </j:invoke>
+
+                <td>${UserName}</td>
+                <td>${UserAge}</td>
+
+
+                ${obj.Name}
+                 ${obj.Age}
+
+            </tr>
+        </j:forEach>
+
+    </table>
+
+    <style>
+table, th, td {
+  border:1px solid black;
+}
+    </style>
+
+
+
+
+</j:jelly>
