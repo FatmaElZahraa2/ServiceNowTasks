@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Card Gallery</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+
+</head>
+
+<body>
+
+    <div ng-app="App" ng-controller="ctrl">
+        <counter count="count"></counter>
+    </div>
+    <script>
+
+        var app = angular.module('App', [])
+        app.controller('ctrl', function ($scope) {
+
+            $scope.count = 0
+
+        })
+        app.directive('counter', function () {
+            return {
+                scope: {
+
+                    count: '='
+                },
+                template: ` 
+                <div class="row text-center">
+                <button ng-click="increment()" class="col btn btn-success"> + </button>
+                <p class="col">{{count}}</p>
+                 <button ng-click="decrement()" class=" col btn btn-danger"> - </button>   
+                </div>`,
+                link: function (s) {
+                    s.increment = function () {
+                        s.count++
+                    }
+                    s.decrement = function () {
+                        s.count--;
+                    }
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div ng-app="App" ng-controller="ctrl">
+        <h1>{{"hello"|FirstLetterCapitalization}}</h1>
+        <my-test></my-test>
+    </div>
+    
+    <script>
+        var app= angular.module('App',[])
+        app.controller('ctrl',function($scope){
+
+        })
+        app.filter('FirstLetterCapitalization',function(){
+            return function(input){
+              return input.charAt(0).toUpperCase() + input.slice('1')
+            }
+        });
+        app.directive('myTest',function(){
+            return{
+                template: `<h2>Hello , Fatma El Zahraa</h2>
+                           <p>Test this directive</p>`
+            }
+        })
+    </script>
+</body>
+</html>

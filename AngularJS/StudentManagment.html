@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div ng-app="StudentMangement" ng-controller="listCtrl">
+        <div class="container my-5">
+            <div class="row  justify-content-center " >
+                 <h5 class="text-secondary py-1">Students Management Task</h5>
+                <input type="text" class="form-control col-lg-6 w-50" placeholder="Enter Student's Name" aria-label="Username"
+                    aria-describedby="addon-wrapping" ng-model="InsertedVal">
+                <div class="dropdown col-lg-6">
+                    <button class="btn btn-dark dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        {{DDbtnName}}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#"
+                                ng-click="Sortby = 'Name'; DDbtnName = 'Sort by Name'">Sort by Name</a></li>
+                        <li><a class="dropdown-item" href="#"
+                                ng-click="Sortby = 'Marks';DDbtnName = 'Sort by Marks (Low to High)'">Sort by Marks (Low
+                                to High)</a>
+                        </li>
+                        <li><a class="dropdown-item" href="#"
+                                ng-click="Sortby = '-Marks';DDbtnName = 'Sort by Marks (High to Low)'">Sort by Marks
+                                (High to Low)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <table class="table table-dark mt-5">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Marks</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="student in TempList = ( StudentsList | filter :InsertedVal | orderBy : Sortby )"
+                    ng-class="student.Marks >80 ?'table-warning':'table-dark'">
+                    <th scope="row">{{$index + 1}}</th>
+                    <td>{{student.Name}}</td>
+                    <td>{{student.Marks}}</td>
+                </tr>
+
+            </tbody>
+        </table>
+        <div class="alert text-center" ng-if="TempList.length === 0">
+            No student matches "{{InsertedVal}}"
+        </div>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script>
+        var app = angular.module('StudentMangement', []);
+        app.controller('listCtrl', function ($scope) {
+
+            $scope.InsertedVal = ""
+            $scope.DDbtnName = ""
+            $scope.Sortby = ""
+
+            $scope.StudentsList = [
+                {
+                    Name: 'Fatma',
+                    Marks: 95
+                },
+                {
+                    Name: 'Sara',
+                    Marks: 80
+                },
+                {
+                    Name: 'Noha',
+                    Marks: 90
+                },
+                {
+                    Name: 'Ali',
+                    Marks: 75
+                },
+                {
+                    Name: 'Nadia',
+                    Marks: 40
+                },
+                {
+                    Name: 'Mohammed',
+                    Marks: 100
+                },
+            ]
+
+        });
+    </script>
+</body>
+
+</html>

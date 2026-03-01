@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Login</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: linear-gradient(to top left, #a7c6e5, white);
+            min-height: 700px;
+        }
+    </style>
+</head>
+
+<body ng-app="LoginForm" class="d-flex align-items-center justify-content-center">
+
+    <div class="card" style="width: 100%; max-width: 400px;">
+        <div class="card-body p-4" ng-controller="ctrl">
+            <h2 class="text-center ">Login</h2>
+
+            <form>
+                <div>
+                    <label class="form-label">Email address</label>
+                    <input type="email" class="form-control" ng-model="EmailM" required>
+                </div>
+                <div>
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" ng-model="PassM" required>
+                </div>
+
+                <div class="alert " ng-show="st" ng-class="log ? 'alert-success' : 'alert-danger'"> {{st}} </div>
+
+                <div class="alert text-primary" ng-hide="st"> Please enter your Email & Password. </div>
+
+                <div class="text-center">
+                    <button ng-click="AlertMsg()" type="button" class="btn btn-primary w-50" ng-disabled="!EmailM || !PassM">
+                        Submit
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let app = angular.module('LoginForm', []);
+        app.controller('ctrl', function ($scope) {
+            
+            $scope.st = ""; 
+            $scope.log = false; 
+            $scope.AlertMsg = function () {
+                if ($scope.EmailM === "admin@gmail.com" && $scope.PassM === "123456") {
+                    $scope.st = "Login successfully";
+                    $scope.log = true;
+                    alert("Hello Admin!");
+                } else {
+                    $scope.st = "Wrong Email or Password";
+                    $scope.log = false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

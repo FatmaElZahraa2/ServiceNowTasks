@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <title>Task</title>
+</head>
+
+<body>
+    <div ng-app="StudentApp" ng-controller="Sctrl">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+
+                    <div class="card border-0 shadow-sm">
+                        <div class="card-body ">
+                            <h5 class="card-title text-secondary">List App</h5>
+
+                            <form>
+                                <div class="input-group">
+                                    <input type="text" class="form-control border-end-0"
+                                        placeholder="Enter Student's Name" ng-model="SName" required>
+                                    <button class="btn btn-dark px-5" type="button" ng-click="AddStudent()" ng-disabled="!SName">Add Student</button>
+                                </div>
+
+                            </form>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+        <div class="container-fluid px-4 mt-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <div class="table-responsive">
+                        <p class="text-center fst-italic fw-2 fs-6" ng-if="studentsList.length === 0">No Students Added
+                            Yet !!</p>
+                        <table class="table  table-bordered" ng-if="studentsList.length > 0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th  style="width: 60%;">Student's Name</th>
+                                    <th  style="width: 40%;">Remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="s in studentsList">
+                                    <td>{{s.Name}}</td>
+                                    <td>
+                                        <button class="btn btn-dark" ng-click="RemoveStudent($index)">
+                                            <i class="fa-solid fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        var app = angular.module('StudentApp', []);
+        app.controller('Sctrl', function ($scope) {
+            $scope.SName = ""
+            $scope.studentsList = []
+            $scope.AddStudent = function () {
+                $scope.studentsList.push({ Name: $scope.SName })
+                $scope.SName = ""
+                console.log($scope.studentsList)
+            }
+            $scope.RemoveStudent = function ($index) {
+                $scope.studentsList.splice($index, 1)
+             //   console.log($scope.studentsList)
+
+            }
+
+        });
+    </script>
+</body>
+
+</html>
