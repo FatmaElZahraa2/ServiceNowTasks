@@ -1,0 +1,31 @@
+
+    <h1>Products</h1>
+     <div class="container-fluid px-4 mt-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                 
+
+                    <div class="table-responsive">
+                       
+                        <table class="table  table-bordered" >
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 40%;">Products's Name</th>
+                                    <th style="width: 40%;">Price</th>
+                                    <th style="width: 20%;">Action</th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in ProductsList">
+                                    <td>{{product.Name}}</td>
+                                    <td>{{product.Price | currency:'$'}}</td>
+                                    <td><a href="#!/prdouctdetails/{{product.id}}">View Details</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>

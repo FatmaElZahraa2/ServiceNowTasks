@@ -1,0 +1,71 @@
+<div class="container mt-5">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Name</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Medical illness</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr ng-repeat="customer in CustomersList">
+                <th>{{$index + 1}}</th>
+                <td>{{customer.name}}</td>
+                <td>{{customer.phone}}</td>
+                <td>{{customer.address}}</td>
+                <td>{{customer.medical_illness}}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-secondary"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editModal"
+                            ng-click="EditCustomer(customer)">
+                        Edit
+                    </button>
+
+                    <button class="btn btn-outline-danger" ng-click="RemoveCustomer(customer.id)">
+                        Remove
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Modal (مرة واحدة فقط) -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered"> <!-- important: modal-dialog-centered -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Edit Customer</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="mb-3">
+                            <label class="form-label">Full Name</label>
+                            <input type="text" class="form-control" ng-model="ChosenCustomer.name">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Phone</label>
+                            <input type="text" class="form-control" ng-model="ChosenCustomer.phone">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Address</label>
+                            <textarea class="form-control" ng-model="ChosenCustomer.address"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Medical Illness</label>
+                            <textarea class="form-control" ng-model="ChosenCustomer.medical_illness"></textarea>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" ng-click="SaveEditCustomer()">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -26,9 +26,12 @@
                         </button>
                     </div>
                     <div class="mt-5">
-                        <div ng-repeat="t in todoList">
+                        <div class="shadow-sm pt-1" ng-repeat="t in todoList">
                             <todo-list task="{{t.Task}}" index="{{$index}}"
                                 remove-task="RemoveTask($index)"></todo-list>
+                        </div>
+                        <div class="alert text-center shadow-sm p-5" ng-if="todoList.length === 0">
+                            <p class=" fs-4 text-muted">No Tasks Yet !!</p>
                         </div>
                     </div>
                 </div>
@@ -54,10 +57,8 @@
                 $scope.todoList.splice($index, 1);
             }
 
-
-
-
         });
+        
         app.directive('todoList', function () {
             return {
                 scope: {

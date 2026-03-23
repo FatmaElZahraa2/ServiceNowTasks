@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <title>Product Management</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #f1f3f5, #e9ecef);
+            color: #212529;
+        }
+
+        .card {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            letter-spacing: 1px;
+        }
+
+        .form-floating {
+            position: relative;
+        }
+
+        .validation-msg {
+            position: absolute;
+            bottom: -18px;
+            left: 0;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container mt-5" ng-app="ProductManagementApp" ng-controller="Pctrl">
+        <div class="card border-0 shadow-lg">
+            <div class="card-header bg-dark py-3 px-4">
+                <h1 class="text-white fs-2 mb-0 fw-medium">Product Management</h1>
+            </div>
+            <div class="card-body p-4 m-3">
+                <form name="PForm" class="row g-3 align-items-end">
+
+                    <div class="col-lg-5">
+                        <div class="form-floating">
+                            <input name="name" type="text" class="form-control" id="floatingInput"
+                                placeholder="Product Name" ng-model="Product_Obj.Name" required>
+                            <label for="floatingInput">Product's Name</label>
+                            <small class="text-danger validation-msg mt-1"
+                                ng-if="PForm.name.$touched && PForm.name.$error.required">
+                                Product name is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="form-floating">
+                            <input name="price" type="number" class="form-control" id="floatingPassword"
+                                placeholder="Product Price" ng-model="Product_Obj.Price" required>
+                            <label for="floatingPassword">Product's Price</label>
+                            <small class="text-danger validation-msg mt-1"
+                                ng-if="PForm.price.$touched && PForm.price.$error.required">
+                                Product price is required
+                            </small>
+                        </div>
+                    </div>
+
+                    <div class="col-md-2 mb-2">
+                        <button class="btn btn-outline-dark  w-100 shadow-sm"
+                            ng-click="!EditMode ? AddNewroduct() : EditProduct()" ng-disabled="PForm.$invalid">
+                            {{!EditMode ? 'Add Product' : 'Edit Product'}}
+                        </button>
+                    </div>
+
+                </form>
+                <div class="row mt-3">
+                    <div class="col-lg-5">
+                        <input type="text" class="form-control" placeholder="Search for product by name"
+                            ng-model="InsertedVal">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="container-fluid px-4 mt-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+
+                    <div class="text-center m-3" ng-if="isLoading">
+                        <div class="spinner-border text-dark" role="status"></div>
+                        <div class="fw-semibold">Loading products…</div>
+                    </div>
+
+                    <div class="table-responsive">
+                        <p class="text-center fst-italic fw-2 fs-6" ng-if="ProductsList.length === 0 && !isLoading">No
+                            Products Added
+                            Yet !!</p>
+                        <table class="table  table-bordered" ng-if="ProductsList.length > 0 && !isLoading">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th style="width: 40%;">Products's Name</th>
+                                    <th style="width: 40%;">Price</th>
+                                    <th style="width: 20%;">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="product in ProductsList | filter : InsertedVal">
+                                    <td>{{product.Name}}</td>
+                                    <td>{{product.Price | currency:'$'}}</td>
+                                    <td>
+                                        <button class="btn btn-outline-secondary"
+                                            ng-click="EditProductChangeMode(product)">
+                                            Edit
+                                        </button>
+                                        <button class="btn btn-outline-danger" ng-click="RemoveProduct(product.id)">
+                                            Remove
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+    <script>
+        var app = angular.module('ProductManagementApp', [])
+        app.service('ProductManagementService', function ($http) {
+            const ApiLink = "https://zhaasxbdspzhvvrixvvn.supabase.co/rest/v1/Product"
+            const ApiKey = "sb_publishable_hRIUIu5TOyasOIz8N4lcTg_hDYpyM3Y"
+            const headers = {
+                "apikey": ApiKey,
+                "Authorization": "Bearer " + ApiKey,
+                "Content-Type": "application/json"
+            }
+            this.getProducts = function () {
+                return $http.get(ApiLink, { headers: headers })
+            }
+            this.AddProduct = function (Product) {
+                return $http.post(ApiLink, Product, { headers: headers })
+            }
+            this.EditProduct = function (Product) {
+                return $http.patch(ApiLink + "?id=eq." + Product.id, Product, { headers: headers })
+            }
+            this.deleteProduct = function (id) {
+                return $http.delete(ApiLink + "?id=eq." + id, { headers: headers })
+            }
+
+        })
+
+        app.controller('Pctrl', function ($scope, ProductManagementService, $timeout) {
+            $scope.ProductsList = []
+            $scope.Product_Obj = {}
+            $scope.isLoading = false
+            $scope.EditMode = false
+            $scope.InsertedVal = ""
+            $scope.RenderTable = function () {
+                $scope.isLoading = true
+                ProductManagementService.getProducts()
+                    .then(function (response) {
+                        console.log(response)
+                        $scope.ProductsList = response.data
+                    })
+                    .catch(function (error) {
+                        console.log("Error loading products", error);
+                    })
+                    .finally(function () {
+                        $timeout(function () {
+                            $scope.isLoading = false;
+                        }, 1000)
+
+                    });
+            }
+            $scope.RenderTable();
+
+            $scope.AddNewroduct = function () {
+                ProductManagementService.AddProduct($scope.Product_Obj)
+                    .then(function () {
+                        $scope.RenderTable();
+                        $scope.Product_Obj = {}
+                    })
+                    .catch(function (err) {
+                        console.log("Error Adding New Product", err)
+                    })
+            }
+
+            $scope.EditProduct = function () {
+                ProductManagementService.EditProduct($scope.Product_Obj)
+                    .then(function () {
+                        $scope.RenderTable()
+                        $scope.Product_Obj = {}
+                        $scope.EditMode = false
+
+                    })
+            }
+            $scope.EditProductChangeMode = function (product) {
+                $scope.Product_Obj = angular.copy(product)
+                $scope.EditMode = true;
+            }
+
+            $scope.RemoveProduct = function (id) {
+                ProductManagementService.deleteProduct(id)
+                    .then(function () {
+                        $scope.RenderTable()
+                    })
+                    .catch(function (err) {
+                        console.log("Error deleting product", err);
+                    });
+            }
+
+
+        })
+    </script>
+</body>
+
+</html>
